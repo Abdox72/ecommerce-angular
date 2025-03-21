@@ -1,1 +1,65 @@
-<p>signup works!</p>
+<div class="container mt-3 mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-lg p-4">
+          <h2 class="text-center mb-4">Signup</h2>
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmitForm(signupForm)">
+            <!-- Name -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Full Name</label>
+              <input type="text" formControlName="name" class="form-control" id="name" placeholder="Enter your name" required>
+              <div class="text-danger" *ngIf="signupForm.controls['name'].invalid && signupForm.controls['name'].touched">
+                <small *ngIf="signupForm.controls['name'].errors?.['required']">Name is required</small>
+                <small *ngIf="signupForm.controls['name'].errors?.['minlength']">Name must be at least 3 characters</small>
+                <small *ngIf="signupForm.controls['name'].errors?.['maxlength']">Name must be max 30 characters</small>
+              </div>
+            </div>
+  
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" formControlName="email" class="form-control" id="email" placeholder="Enter your email" required>
+              <div class="text-danger" *ngIf="signupForm.controls['email'].invalid && signupForm.controls['email'].touched">
+                <small *ngIf="signupForm.controls['email'].errors?.['required']">email is required</small>
+                <small *ngIf="signupForm.controls['email'].errors?.['email']">email is not valid</small>
+              </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="tel" formControlName="phoneNumber" class="form-control" id="phone" placeholder="Enter your phone number" required>
+              <div class="text-danger" *ngIf="signupForm.controls['phoneNumber'].invalid && signupForm.controls['phoneNumber'].touched">
+                <small *ngIf="signupForm.controls['phoneNumber'].errors?.['required']">Phone Number is required</small>
+                <small *ngIf="signupForm.controls['phoneNumber'].errors?.['pattern']">invalid phone number</small>
+            </div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" formControlName="password" class="form-control" id="password" placeholder="Enter your password" required>
+              <div class="text-danger" *ngIf="signupForm.controls['password'].invalid && signupForm.controls['password'].touched">
+                <small *ngIf="signupForm.controls['password'].errors?.['required']">password is required</small>
+                <small *ngIf="signupForm.controls['password'].errors?.['pattern']">invalid pattern password</small>
+            </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" formControlName="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+              <div class="text-danger" *ngIf="signupForm.controls['confirmPassword'].invalid && signupForm.controls['confirmPassword'].touched">
+                <small *ngIf="signupForm.controls['confirmPassword'].errors?.['required']">confirmPassword is required</small>
+                <small *ngIf="signupForm.controls['confirmPassword'].errors?.['notMatched']">Mismatch passwords</small>
+            </div>
+            </div>
+
+            <!-- Signup Button -->
+            <button [disabled]="signupForm.invalid" class="btn btn-primary w-100">Signup</button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+  
