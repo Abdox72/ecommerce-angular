@@ -4,7 +4,7 @@ import { NavAuthComponent } from '../../components/nav-auth/nav-auth.component';
 
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, RouterLink , RouterLinkActive, NavAuthComponent],
+  imports: [RouterOutlet, NavAuthComponent],
   templateUrl: './auth-layout.component.html',
   styleUrl: './auth-layout.component.css',
 })
