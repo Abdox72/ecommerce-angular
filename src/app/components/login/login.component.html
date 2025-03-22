@@ -1,1 +1,36 @@
-<p>login works!</p>
+<div class="container mt-3 mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-lg p-4">
+          <h2 class="text-center mb-4">Login</h2>
+          <form [formGroup]="loginForm" (ngSubmit)="onLoginForm(loginForm)">
+  
+            <!-- email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">email</label>
+              <input type="text" formControlName="email" class="form-control" id="email" placeholder="Enter your email" required>
+              <div class="text-danger" *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched">
+                <small *ngIf="loginForm.controls['email'].errors?.['required']">email is required</small>
+                <small *ngIf="loginForm.controls['email'].errors?.['email']">email is not valid</small>
+              </div>
+            </div>
+
+
+            <!-- Password -->
+            <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" formControlName="password" class="form-control" id="password" placeholder="Enter your password" required>
+              <div class="text-danger" *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">
+                <small *ngIf="loginForm.controls['password'].errors?.['required']">password is required</small>
+                <small *ngIf="loginForm.controls['password'].errors?.['pattern']">invalid pattern password</small>
+            </div>
+            </div>
+
+            <!-- Signup Button -->
+            <button [disabled]="loginForm.invalid" class="btn btn-primary w-100">Login</button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+  

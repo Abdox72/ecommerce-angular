@@ -9,4 +9,7 @@
   .btn {
     font-weight: 600;
   }
-  
+.active-nav-link{
+    background-color: rgb(37, 37, 171) !important;
+    color: white !important;
+}

@@ -15,6 +15,17 @@
               </div>
             </div>
   
+            <!-- username -->
+            <div class="mb-3">
+              <label for="username" class="form-label">username</label>
+              <input type="text" formControlName="username" class="form-control" id="username" placeholder="Enter your username" required>
+              <div class="text-danger" *ngIf="signupForm.controls['username'].invalid && signupForm.controls['username'].touched">
+                <small *ngIf="signupForm.controls['username'].errors?.['required']">username is required</small>
+                <small *ngIf="signupForm.controls['username'].errors?.['minlength']">Name must be at least 3 characters</small>
+                <small *ngIf="signupForm.controls['username'].errors?.['maxlength']">Name must be max 20 characters</small>              
+              </div>
+            </div>
+
             <!-- Email -->
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>

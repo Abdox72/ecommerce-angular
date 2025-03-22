@@ -1,0 +1,37 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Abdo",
+      "username": "abdo72",
+      "email": "abdo@mail.com",
+      "password": "abdo123",
+      "phoneNumber": "01283649857"
+    },
+    {
+      "id": "2",
+      "name": "ali",
+      "username": "ali88",
+      "email": "ali@mail.com",
+      "password": "ali123",
+      "phoneNumber": "01183342858"
+    },
+    {
+      "id": "9804",
+      "name": "khalid",
+      "username": "khalid77",
+      "email": "khalid77@gmail.com",
+      "password": "123456",
+      "confirmPassword": "123456",
+      "phoneNumber": "01157895731"
+    },
+    {
+      "id": "da83",
+      "name": "khalid",
+      "username": "khalid77",
+      "email": "khalid72@gmail.com",
+      "password": "123456",
+      "phoneNumber": "01157895731"
+    }
+  ]
+}
