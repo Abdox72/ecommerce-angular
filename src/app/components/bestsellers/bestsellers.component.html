@@ -1,0 +1,9 @@
+    <!-- Best Sellers Section -->
+    <section class="best-sellers">
+        <h2 class="mb-4">Best Selling</h2>
+        <div class="row my-4">
+            <div class="col-md-4 my-2" *ngFor="let product of products">
+                <app-product-card [productCard]="product"></app-product-card>
+            </div>
+        </div>
+      </section>

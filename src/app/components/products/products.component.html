@@ -1,1 +1,11 @@
-<p>products works!</p>
+<section class="container">
+    <input type="search" id="productFilter" [(ngModel)] = "productFilter" placeholder="Search Product" class="form-control my-3" aria-label="Search Product" aria-describedby="button-addon4">
+        
+    <h2 class="my-4">Products</h2>
+    <div class="row my-4">
+        <div class="col-md-4 my-2" *ngFor="let product of products | filter:productFilter">
+            <app-product-card [productCard]="product"></app-product-card>
+        </div>
+    </div>
+</section>
+    

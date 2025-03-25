@@ -32,6 +32,14 @@
       "email": "khalid72@gmail.com",
       "password": "123456",
       "phoneNumber": "01157895731"
+    },
+    {
+      "id": "24e5",
+      "name": "kareem Abdo",
+      "username": "Kareem10",
+      "email": "kareem10@gmail.com",
+      "password": "123456",
+      "phoneNumber": "01157895731"
     }
   ]
 }

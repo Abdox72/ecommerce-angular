@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../interfaces/user';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -17,25 +18,25 @@ export class LoginComponent {
     password: new FormControl('' , [Validators.required, Validators.pattern(/^[a-zA-z0-9_@&%$-.#]{6,}$/)]),
   });
 
-  constructor(private _authService:AuthService , private _router :Router){}
+  constructor(private _authService:AuthService , private _router :Router , private _toastrService:ToastrService){}
   onLoginForm(form:FormGroup):void{
     if (this.loginForm.invalid){
-      console.log('Form is invalid');
+      this._toastrService.error('Please fill all the fields correctly');
       return;
     }
     else{
       this._authService.loginUser(form.value).subscribe({
         next: (response:User) => {
-          console.log(response);
           localStorage.setItem('user', JSON.stringify(response));
+          this._toastrService.success('User logged in successfully');
           // Redirect to home page
           this._router.navigate(['/home']);
         },
         error: (error) => {
+          this._toastrService.error('Error while logging in user');
           console.log(error);
         }
       });
     }
-
   }
 }

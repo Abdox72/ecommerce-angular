@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormControlOptions, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService  } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +22,7 @@ export class SignupComponent {
     phoneNumber: new FormControl('' , [Validators.required, Validators.pattern(/^[01][0125][0-9]{9}$/)])
   } ,{validators: [this.validateConfirmPassword] } as FormControlOptions );
 
-  constructor(private authService: AuthService , private _router: Router){
+  constructor(private authService: AuthService , private _router: Router , private _toastrService: ToastrService){
   }
   validateConfirmPassword(formGroup:FormGroup):void{
     const pass = formGroup.get('password');
@@ -37,27 +38,26 @@ export class SignupComponent {
       this.authService.checkUserExists(form.get('email')?.value).subscribe({
         next: (userExist) => {
           if (userExist){
-            console.log('User already exists');
+            this._toastrService.error('User already exists with this email');
           }
           else {
             const {confirmPassword , ...usrData} = form.value;
             this.authService.registerUser(usrData).subscribe({
               next: (response) => {
+                this._toastrService.success('User registered successfully');
                 console.log(response);
                 this._router.navigate(['/login']);
               },
               error: (error) => {
+                this._toastrService.error('Error while registering user');
                 console.log(error);
               }
             });
           }
         }
       });
-
-
-      
     } else{
-      console.log('Form is invalid');
+      this._toastrService.error('Please fill all the fields correctly');
     }
   }
 }

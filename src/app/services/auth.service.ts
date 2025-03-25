@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User, UserLogin } from '../interfaces/user';
 import { map, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   apiUrl = 'http://localhost:3000/users';
-  constructor(private _httpClient : HttpClient) {
+  constructor(private _httpClient : HttpClient , private router: Router) {
   }
 
     // Check if user exists by email
@@ -33,5 +34,6 @@ export class AuthService {
   }
   logoutUser():void{
     localStorage.removeItem('user');
+    this.router.navigate(['/login']);
   }
 }
