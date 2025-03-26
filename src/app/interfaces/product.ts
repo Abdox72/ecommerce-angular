@@ -9,4 +9,5 @@ export interface Product {
         count: number;
         rate: number; 
     };
+    bayesianScore?: number ;
 }

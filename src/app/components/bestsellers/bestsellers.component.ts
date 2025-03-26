@@ -15,7 +15,6 @@ export class BestsellersComponent implements OnInit {
   constructor(private productsSerivce:ProductsService ) { }
 
   bayesianAverage(productCount:number , productRate:number , avergeSales:number , avergeRating:number):number{
-    console.log(productCount, productRate, avergeSales, avergeRating);
     const adjustedRating = ((avergeRating* avergeSales) + (productRate * productCount) ) / (avergeSales + productCount);
     return adjustedRating;
   }

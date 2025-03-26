@@ -1,0 +1,62 @@
+.card-layer{
+    position: absolute;
+    top: 43%;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: -1;
+}
+.card:hover .card-layer{
+    opacity: 1;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+}
+.card-icon{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: -1;
+
+}
+.card-icon .fa-eye{
+    transition: all 0.3s ease;
+    font-size: 4rem !important;
+    color: aquamarine !important;
+}
+.card:hover .card-icon{
+    opacity: 1;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+}
+.card-img-best{
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+.card:hover .card-img-best{
+    opacity: 1;
+    transform: translate(-50%, 50%) scale(1.2, 1.2) ;
+    z-index: 1;
+}
