@@ -10,5 +10,17 @@
         <div class="rating mb-2">
           <span class="text-warning">{{productCard.rating.rate.toString() | rate }}</span><small>({{productCard.rating.rate}})</small>
         </div>
-      <a class="btn btn-primary mt-auto">Add To Cart</a>
+        <!-- <div class="d-flex flex-row justify-content-start align-items-center flex-wrap gap-1">
+          <a class="btn btn-info mt-auto me-2" (click)="addtocart()"><i class="fa-solid fa-cart-plus"></i> Add To Cart</a>
+          <a class="btn btn-info mt-auto" (click)="addtowishlist()"><i class="fa-solid fa-heart"></i> Add To Wishlist</a>
+        </div> -->
+        <!-- Add to Cart -->
+        <div class="d-flex gap-2 flex-row justify-content-start align-items-center flex-wrap">
+          <button class="btn add-to-cart-btn" (click)="addtocart()">
+              <i class="bi bi-cart3 me-2"></i>Add to Cart
+          </button>
+          <button class="btn btn-outline-secondary px-4 py-2" (click)="addtowishlist()">
+              <i class="bi bi-heart"></i>
+          </button>
+      </div>
     </div>

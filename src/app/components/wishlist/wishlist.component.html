@@ -1,1 +1,47 @@
-<p>wishlist works!</p>
+<div class="wishlist-container">
+    <div class="wishlist-header d-flex justify-content-between align-items-center">
+        <h2>My Wishlist <span class="badge bg-primary">{{wishlist.products.length}}</span></h2>
+    </div>
+    <!-- Wishlist Items -->
+    <div class="row" *ngIf="wishlist.products.length > 0; else emptyTemp">
+        <!-- Wishlist Item 1 -->
+        <div class="col-12 mb-4"  *ngFor="let product of wishlist.products">
+            <div class="wishlist-item">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <img [src]="product.image" [alt]="product.title" class="product-image img-fluid">
+                    </div>
+                    <div class="col-md-5">
+                        <div role="button" [routerLink]="['/productDetails',product.id]" class="product-title" ><h4>{{product.title}}</h4></div>
+                        <div class="mt-2">
+                            <span class="text-muted">{{product.category}}</span>
+                        </div>
+                        <div class="mt-2">
+                            <span class="price-tag">{{product.price | currency }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="availability-badge in-stock">In Stock</div>
+                        <div class="action-buttons mt-3 text-end">
+                            <button class="btn move-to-cart" (click)="addtocart(product)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="btn remove-btn" (click)="removeItemFromWishlist(product)">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Empty Wishlist State -->
+    <ng-template #emptyTemp>
+        <div class="empty-wishlist">
+            <i class="far fa-heart fa-3x mb-3"></i>
+            <h3>Your Wishlist is Empty</h3>
+            <p>Start adding items you love!</p>
+            <button class="btn btn-primary mt-3" routerLink="/products">Continue Shopping</button>
+        </div>
+    </ng-template>
+</div>

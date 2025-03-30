@@ -1,0 +1,99 @@
+
+.cart-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+}
+
+.cart-item {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.cart-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.product-img {
+    max-width: 150px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.quantity-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #dee2e6;
+    background: #f8f9fa;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.quantity-btn:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    margin: 0 10px;
+}
+
+/* .remove-btn {
+    color: #6c757d;
+    transition: color 0.3s ease;
+} */
+
+.remove-btn {
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    margin-top: 7px;
+    text-decoration:none ;
+}
+
+.remove-btn:hover {
+    background: #dc3545;
+    color: white;
+}
+.summary-card {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.checkout-btn {
+    background: #28a745;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    transition: transform 0.3s ease;
+}
+
+.checkout-btn:hover {
+    transform: translateY(-2px);
+    background: #218838;
+}
+
+.stock-badge {
+    background: #d4edda;
+    color: #155724;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+}
+.empty-cart {
+    text-align: center;
+    padding: 5rem 0;
+    color: #6c757d;
+    height: 50dvh;
+}

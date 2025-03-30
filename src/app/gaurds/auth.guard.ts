@@ -4,7 +4,7 @@ import { inject } from '@angular/core';
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router); // Inject AuthService
   // Check if user is logged in
-  const isLoggedIn = !!localStorage.getItem('user');
+  const isLoggedIn = !!localStorage.getItem('token'); // Check if token exists in local storage
   if (!isLoggedIn) {
     router.navigate(['/login']); // Redirect to login if not authenticated
     return false;

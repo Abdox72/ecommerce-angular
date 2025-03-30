@@ -1,1 +1,42 @@
-<p>product-details works!</p>
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Product Image -->
+        <div class="col-md-6">
+            <img [src]="product.image" [alt]="product.title" class="product-image img-fluid shadow-lg">
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <!-- Category -->
+            <span class="category-badge badge mb-3">{{product.category}}</span>
+            
+            <!-- Title -->
+            <h1 class="mb-3">{{product.title}}</h1>
+            
+            <!-- Rating -->
+            <div class="rating mb-3">
+                <span> {{product.rating.rate.toString()| rate}} </span>
+                <span class="ms-2">({{product.rating.count}})</span>
+            </div>
+
+            <!-- Price -->
+            <h2 class="price mb-4"> {{product.price | currency  }} </h2>
+
+            <!-- Description -->
+            <div class="description mb-4">
+                <p>
+                    {{product.description}}
+                </p>
+            </div>
+            <!-- Add to Cart -->
+            <div class="d-flex gap-3">
+                <button class="btn add-to-cart-btn" (click)="addtocart()">
+                    <i class="bi bi-cart3 me-2"></i>Add to Cart
+                </button>
+                <button class="btn btn-outline-secondary px-4 py-2" (click)="addtowishlist()">
+                    <i class="bi bi-heart"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

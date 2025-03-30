@@ -11,6 +11,10 @@
 npm-debug.log
 yarn-error.log
 
+#firebase keys
+src/environments/environment.ts
+src/environments/environment.prod.ts
+
 # IDEs and editors
 .idea/
 .project

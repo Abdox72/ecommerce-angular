@@ -1,39 +1,58 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User, UserLogin } from '../interfaces/user';
-import { map, Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
+import {auth , db} from '../../main';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
+import { User as IUser } from '../interfaces/user';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  apiUrl = 'http://localhost:3000/users';
-  constructor(private _httpClient : HttpClient , private router: Router) {
+  private user$ = new BehaviorSubject<User | null>(null);
+
+  constructor() {
+    onAuthStateChanged(auth, (user) => {
+      this.user$.next(user);
+    });
   }
 
-    // Check if user exists by email
-  checkUserExists(email: string): Observable<boolean> {
-      return this._httpClient.get<User[]>(this.apiUrl).pipe(
-        map( (users:User[]) => users.some(user => user.email === email))
-      );
+  async registerUser(usr:IUser): Promise<boolean> {
+    try {
+      // Create user in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, usr.email, usr.password);
+      const user: User = userCredential.user;
+
+      const { name, email, username , phoneNumber } = usr; // Destructure user data
+
+      // Store user data in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        name: name,
+        username: username,
+        email: email,
+        phoneNumber: phoneNumber,
+        role: 'customer',
+        createdAt: new Date().toISOString(),
+      });
+      return true;
+    } catch (error) {
+      return false;  // Registration failed
+    }
   }
-  registerUser(user:User):Observable<any>{
-    return this._httpClient.post(this.apiUrl,user);
+
+  async login(email: string, password: string): Promise<string | null> {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      return await userCredential.user.getIdToken();
+    } catch (error) {
+      return null;
+    }
   }
-  loginUser(user:UserLogin):Observable<any>{
-    return this._httpClient.get<User[]>(`${this.apiUrl}?email=${user.email}&password=${user.password}`).pipe(
-      map(users => {
-        if (users.length > 0) {
-          return users[0];
-        } else {
-          throw new Error('Invalid credentials');
-        }
-      })
-    );
+  async logout() {
+    await signOut(auth);
+    localStorage.removeItem('token');
   }
-  logoutUser():void{
-    localStorage.removeItem('user');
-    this.router.navigate(['/login']);
+  getCurrentUser(): Observable<User | null> {
+    return this.user$.asObservable();
   }
 }

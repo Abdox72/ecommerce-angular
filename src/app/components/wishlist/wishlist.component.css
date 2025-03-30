@@ -1,0 +1,108 @@
+.wishlist-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 20px;
+}
+
+.wishlist-item {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    position: relative;
+}
+
+.wishlist-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.product-image {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+    transform: scale(1.03);
+}
+
+.price-tag {
+    font-size: 1.25rem;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.availability-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.in-stock {
+    background: #d4edda;
+    color: #155724;
+}
+
+.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.action-buttons .btn {
+    padding: 8px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    margin: 5px;
+}
+
+.remove-btn {
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.remove-btn:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.move-to-cart {
+    background: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+.move-to-cart:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}
+
+.wishlist-header {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.empty-wishlist {
+    text-align: center;
+    padding: 5rem 0;
+    color: #6c757d;
+}
+
+.product-title {
+    color: #2c3e50;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.product-title:hover {
+    color: #007bff;
+    text-decoration: none;
+}

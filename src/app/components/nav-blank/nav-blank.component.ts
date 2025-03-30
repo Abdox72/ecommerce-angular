@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -9,8 +9,10 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './nav-blank.component.css'
 })
 export class NavBlankComponent {
-  constructor(private auth:AuthService) { }
+  constructor(private auth:AuthService , private _router:Router) { }
   logout(){
-    this.auth.logoutUser();
+    this.auth.logout().then(() => {
+      this._router.navigate(['/login']);  
+    });
   }
 }

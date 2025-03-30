@@ -35,27 +35,18 @@ export class SignupComponent {
   }
   onSubmitForm(form:FormGroup):void{
     if(form.valid){
-      this.authService.checkUserExists(form.get('email')?.value).subscribe({
-        next: (userExist) => {
-          if (userExist){
-            this._toastrService.error('User already exists with this email');
-          }
-          else {
-            const {confirmPassword , ...usrData} = form.value;
-            this.authService.registerUser(usrData).subscribe({
-              next: (response) => {
-                this._toastrService.success('User registered successfully');
-                console.log(response);
-                this._router.navigate(['/login']);
-              },
-              error: (error) => {
-                this._toastrService.error('Error while registering user');
-                console.log(error);
-              }
-            });
-          }
+      this.authService.registerUser(this.signupForm.value).then((registered) => {
+        if(registered){
+          this._toastrService.success('User registered successfully');
+          this._router.navigate(['/login']);
         }
+        else{
+          throw new Error('Registration failed');
+        }
+      }).catch((error) => {
+        this._toastrService.error('Error while registering user');
       });
+
     } else{
       this._toastrService.error('Please fill all the fields correctly');
     }

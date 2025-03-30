@@ -60,3 +60,14 @@
     transform: translate(-50%, 50%) scale(1.2, 1.2) ;
     z-index: 1;
 }
+.add-to-cart-btn {
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s;
+}
+.add-to-cart-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}

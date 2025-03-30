@@ -29,6 +29,7 @@
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css",
               "./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "./node_modules/ngx-toastr/toastr.css",
               "src/styles.css"

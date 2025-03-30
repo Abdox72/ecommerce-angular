@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../interfaces/user';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-login',
@@ -19,24 +19,32 @@ export class LoginComponent {
   });
 
   constructor(private _authService:AuthService , private _router :Router , private _toastrService:ToastrService){}
+
   onLoginForm(form:FormGroup):void{
     if (this.loginForm.invalid){
       this._toastrService.error('Please fill all the fields correctly');
       return;
     }
     else{
-      this._authService.loginUser(form.value).subscribe({
-        next: (response:User) => {
-          localStorage.setItem('user', JSON.stringify(response));
-          this._toastrService.success('User logged in successfully');
-          // Redirect to home page
-          this._router.navigate(['/home']);
-        },
-        error: (error) => {
+          const {email , password} = this.loginForm.value;
+          this._authService.login( email , password).then((token:string | null) => {
+            if (token) {
+              // Store token in local storage
+              localStorage.setItem('token', token);              
+              // Signed in 
+            this._toastrService.success('User logged in successfully');
+            // Redirect to home page
+            this._router.navigate(['/home']);
+            }
+        }).catch( (error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
           this._toastrService.error('Error while logging in user');
-          console.log(error);
-        }
-      });
+          console.log(errorCode , errorMessage);
+        });
+
+        //compelte
     }
   }
 }
