@@ -1,0 +1,67 @@
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.error-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(0);
+    animation: float 3s ease-in-out infinite;
+}
+
+.error-code {
+    font-size: 8rem;
+    font-weight: 900;
+    color: #2d3748;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: pulse 2s infinite;
+}
+
+.error-message {
+    font-size: 1.5rem;
+    margin: 20px 0;
+    color: #4a5568;
+}
+
+.search-box {
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+.ghost {
+    width: 120px;
+    margin: 20px auto;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+.ghost:hover {
+    transform: rotate(10deg);
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .error-code {
+        font-size: 5rem;
+    }
+    .error-message {
+        font-size: 1.2rem;
+    }
+}
