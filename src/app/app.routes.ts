@@ -53,8 +53,10 @@ export const routes: Routes = [
             },
         ]
     },
+    { path: 'forgot-password', loadComponent: ()=> import('./components/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)},
+    { path: 'reset-password', loadComponent:()=> import('./components/reset-password/reset-password.component').then(m=>m.ResetPasswordComponent) },
     {
         path: '**',
         loadComponent: () => import('./components/page-not-found404/page-not-found404.component').then(m => m.PageNotFound404Component),
-    }
+    },
 ];

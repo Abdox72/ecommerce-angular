@@ -36,15 +36,15 @@ export class SignupComponent {
   onSubmitForm(form:FormGroup):void{
     if(form.valid){
       this.authService.registerUser(this.signupForm.value).then((registered) => {
-        if(registered){
+        if(registered?.success){
           this._toastrService.success('User registered successfully');
           this._router.navigate(['/login']);
         }
-        else{
-          throw new Error('Registration failed');
+        if(registered?.error){
+          this._toastrService.success(registered?.error);
         }
-      }).catch((error) => {
-        this._toastrService.error('Error while registering user');
+      }).catch((error:Error) => {
+        this._toastrService.error(error.message);
       });
 
     } else{

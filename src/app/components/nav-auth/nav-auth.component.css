@@ -3,8 +3,11 @@
   }
   
   .navbar {
-    padding: 10px 20px;
-  }
+    padding: 0 0 !important;
+    border-bottom-left-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+    }
+  
   
   .btn {
     font-weight: 600;
@@ -13,3 +16,4 @@
     background-color: rgb(37, 37, 171) !important;
     color: white !important;
 }
+

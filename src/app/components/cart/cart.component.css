@@ -97,3 +97,8 @@
     color: #6c757d;
     height: 50dvh;
 }
+.cart-header {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}

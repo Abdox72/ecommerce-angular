@@ -29,6 +29,12 @@
             <!-- Signup Button -->
             <button [disabled]="loginForm.invalid" class="btn btn-primary w-100">Login</button>
         </form>
+        <div class="d-flex justify-content-around align-items-center flex-wrap">
+          <button type="button" (click)="signInWithgoogle()" class="login-with-google-btn" >
+            Sign in with Google
+          </button>
+          <a routerLink="/forgot-password" class="d-inline-block p-3" >Forgotten password?</a>
+        </div>
         </div>
     </div>
     </div>
