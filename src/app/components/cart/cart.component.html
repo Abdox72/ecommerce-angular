@@ -1,6 +1,6 @@
 <div class="cart-container">
     <div class="cart-header">
-        <h2>My Wishlist <span class="badge bg-primary">{{(userCart|async)?.products?.length}}</span></h2>
+        <h2>My Cart <span class="badge bg-primary">{{(userCart|async)?.products?.length}}</span></h2>
     </div>
     <!-- Cart Items -->
     <div *ngIf="userCart|async as userCart">
