@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { User } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth/web-extension';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +12,15 @@ import { User } from 'firebase/auth';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     loginForm:FormGroup = new FormGroup({
     email: new FormControl('' , [Validators.required, Validators.email]),
     password: new FormControl('' , [Validators.required, Validators.pattern(/^[a-zA-z0-9_@&%$-.#]{6,}$/)]),
   });
-
+  hostname:string = window.location.hostname;
   constructor(private _authService:AuthService , private _router :Router , private _toastrService:ToastrService){}
+  ngOnInit(): void {
+  }
 
   onLoginForm(form:FormGroup):void{
     if (this.loginForm.invalid){
@@ -46,10 +48,9 @@ export class LoginComponent {
     }
   }
 
-
-  async signInWithgoogle() {
+  async signInWithgooglePopup() {
     try {
-      const user = await this._authService.signInWithGoogle();
+      const user = await this._authService.signInWithGooglePopup();
       if (user) {
         // Store token in local storage
         localStorage.setItem('token', await user.getIdToken());              
@@ -61,6 +62,32 @@ export class LoginComponent {
       console.log(user);
     } catch (error) {
       console.log(error);
+    }
+  }
+  async signInWithgoogleRedirect() {
+    try {
+      await this._authService.signInwithgoogleRedirect();
+      const response = await this._authService.getGoogleRedirectResult();
+      if (response.error){
+        this._toastrService.error(response.error);
+        return;
+      }
+      else if (response.success){
+        if(response.result){
+          // Store token in local storage
+          let userCredential = GoogleAuthProvider.credentialFromResult(response.result);
+          if (userCredential && userCredential.accessToken)
+          {
+            localStorage.setItem('token', userCredential.accessToken);              
+            // Signed in 
+            this._toastrService.success('User logged in successfully');
+          // Redirect to home page
+            this._router.navigate(['/home']);
+          }
+        }
+      }
+    } catch (error:any) {
+      this._toastrService.error('Error while logging in with Google Auth: ' + error?.message);
     }
   }
 

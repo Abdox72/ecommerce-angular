@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification,getRedirectResult, signInWithRedirect } from "firebase/auth";
 import {auth , db} from '../../main';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { User as IUser } from '../interfaces/user';
@@ -56,17 +56,6 @@ export class AuthService {
     await signOut(auth);
     localStorage.removeItem('token');
   }
-    // Google Sign-In
-    async signInWithGoogle() {
-      try {
-        const result = await signInWithPopup(auth, this.googleProvider);
-        return result.user;
-      } catch (error) {
-        console.error('Google sign-in error:', error);
-        throw error;
-      }
-    }
-
 
   getCurrentUser(): Observable<User | null> {
     return this.user$.asObservable();
@@ -79,4 +68,33 @@ export class AuthService {
   async confirmPasswordReset(oobCode: string, newPassword: string): Promise<void> {
     return confirmPasswordReset(auth, oobCode, newPassword);
   }
+
+    // Google Sign-In popup
+    async signInWithGooglePopup() {
+      try {
+        const result = await signInWithPopup(auth, this.googleProvider);
+        return result.user;
+      } catch (error) {
+        console.error('Google sign-in error:', error);
+        throw error;
+      }
+    }
+
+      // Google Sign-In
+      async signInwithgoogleRedirect(){
+        await signInWithRedirect(auth, this.googleProvider);
+      }
+      async getGoogleRedirectResult() : Promise<any> {
+        getRedirectResult(auth)
+        .then((result) => {
+          if(result){
+            return {sucess:'signed in successfully' , result}
+          }else{
+            return{error: 'Google sign-in error' , result:null}
+          }
+        }).catch((error) => {
+          return{error: error.message , result:null}
+        });
+      }
+  
 }
