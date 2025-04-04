@@ -48,7 +48,7 @@ export class AuthService {
       // if (!userCredential.user.emailVerified) {
       //   throw new Error('Please verify your email before signing in.');
       // }
-      return {success:"Logged in successfully." , token:await userCredential.user.getIdToken()};
+      return {success:"Logged in successfully." , token: await userCredential.user.getIdToken()};
     } catch (error:any) {
       return {error : error?.message}; // Registration failed
     }
@@ -72,33 +72,12 @@ export class AuthService {
 
     // Google Sign-In popup
     async signInWithGooglePopup() {
-      try {
         const result = await signInWithPopup(auth, this.googleProvider);
         return result.user;
-      } catch (error) {
-        console.error('Google sign-in error:', error);
-        throw error;
-      }
     }
 
     // Google Sign-In
     async signInwithgoogleRedirect(){
-      this.googleProvider.setCustomParameters({  
-        prompt: "select_account"
-      });
       await signInWithRedirect(auth, this.googleProvider);
     }
-    async getGoogleRedirectResult() : Promise<any> {
-      getRedirectResult(auth)
-      .then((result) => {
-        if(result){
-          return {sucess:'signed in successfully' , result}
-        }else{
-          return{error: 'Google sign-in error' , result:null}
-        }
-      }).catch((error) => {
-        return{error: error.message , result:null}
-      });
-    }
-  
 }

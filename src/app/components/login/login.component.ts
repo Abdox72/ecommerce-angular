@@ -20,17 +20,41 @@ export class LoginComponent implements OnInit {
   });
   hostname:string = window.location.hostname;
   constructor(private _authService:AuthService , private _router :Router , private _toastrService:ToastrService){}
-  ngOnInit(): void {
-    getRedirectResult(auth).then((response)=>{
-      console.log(response);
-    }).catch((error)=>{
-      console.log(error);
-    });;
+  async ngOnInit(): Promise<void> {
+    // Check if user is already logged in
+    const user = auth.currentUser;
+    if (user) {
+      // User is already logged in
+      this._router.navigate(['/home']);
+    } else {
+      // User is not logged in, check for redirect result
+      getRedirectResult(auth)
+      .then(async (result) => {
+        if(result){
+          // User is signed in
+          const user = result.user;
+          // Store token in local storage
+          localStorage.setItem('token', await user.getIdToken());              
+          // Signed in 
+          this._toastrService.success('User logged in successfully');
+          // Redirect to home page
+          this._router.navigate(['/home']);
+        }else{
+          // User is not signed in          
+          // Handle the case when user is not signed in
+          // You can show a message or redirect to login page
+          this._toastrService.info('Please log in to continue');
+          
+        }
+      }).catch((error) => {
+        return{error: error.message , result:null}
+      });
+    }
   }
 
   onLoginForm(form:FormGroup):void{
     if (this.loginForm.invalid){
-      this._toastrService.error('Please fill all the fields correctly');
+      this._toastrService.error("Please fill the form correctly");
       return;
     }
     else{
@@ -40,16 +64,16 @@ export class LoginComponent implements OnInit {
               // Store token in local storage
               localStorage.setItem('token', result.token);              
               // Signed in 
-            this._toastrService.success(result.success);
+            this._toastrService.success("User logged in successfully");
             // Redirect to home page
             this._router.navigate(['/home']);
             }
             if(result.error){
-              this._toastrService.error(result.error);
+              this._toastrService.error("Error while logging in: " + result.error);
             }
         }).catch( (error) => {
           // ..
-          this._toastrService.error(error);
+          this._toastrService.error("Error while logging in: " + error?.message);
         });
     }
   }
@@ -57,6 +81,7 @@ export class LoginComponent implements OnInit {
   async signInWithgooglePopup() {
     try {
       const user = await this._authService.signInWithGooglePopup();
+      // Check if user is not null
       if (user) {
         // Store token in local storage
         localStorage.setItem('token', await user.getIdToken());              
@@ -65,9 +90,8 @@ export class LoginComponent implements OnInit {
         // Redirect to home page
         this._router.navigate(['/home']);
       }
-      console.log(user);
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+      this._toastrService.error('Error while logging in with Google Auth: ' + error?.message);
     }
   }
   async signInWithgoogleRedirect() {

@@ -37,17 +37,17 @@ export class SignupComponent {
     if(form.valid){
       this.authService.registerUser(this.signupForm.value).then((registered) => {
         if(registered?.success){
-          this._toastrService.success('User registered successfully');
+          this._toastrService.success('User registered successfully. Please check your inbox for verification email.');
           this._router.navigate(['/login']);
         }
         if(registered?.error){
-          this._toastrService.success(registered?.error);
+          this._toastrService.error('Error while registering user: ' + registered?.error);
         }
       }).catch((error:Error) => {
-        this._toastrService.error(error.message);
+        this._toastrService.error('Error while registering user: ' + error?.message);
       });
 
-    } else{
+    }else{
       this._toastrService.error('Please fill all the fields correctly');
     }
   }

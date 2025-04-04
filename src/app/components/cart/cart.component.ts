@@ -36,7 +36,7 @@ export class CartComponent implements OnInit ,OnDestroy{
     this.initConfig();
   }
   remove(cartid?:string , productId? : number) {
-    this._cartService.removeFromCart('', productId ?? 0).then((removed) => {
+    this._cartService.removeFromCart(productId ?? 0).then((removed) => {
       if(removed) {
         this.cartInit();
         this._toastr.success("Product removed successfully");
@@ -45,10 +45,10 @@ export class CartComponent implements OnInit ,OnDestroy{
       console.error(error);
     });
   }
-  quantityChanged(newValue: any , product:{product:Product , quantity:number}){
+  async quantityChanged(newValue: any , product:{product:Product , quantity:number}){
     const newQuantity = parseInt(newValue.target.value, 10);
     if (!isNaN(newQuantity)  ){
-        this._cartService.addToCart(product.product, newQuantity);
+      await  this._cartService.addToCart(product.product, newQuantity , true);
     }
   }
   cartInit() {

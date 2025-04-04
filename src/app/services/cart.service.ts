@@ -33,7 +33,7 @@ export class CartService {
             }
         });
     }
-    async addToCart(product: Product, quantity: number): Promise<void> {
+    async addToCart(product: Product, quantity: number , write:boolean=false): Promise<void> {
         const currentCart = this._cart.getValue();
         if(!currentCart) {
             this._auth.getCurrentUser().subscribe(async user => {
@@ -51,20 +51,28 @@ export class CartService {
             });
         }else{
             const existingProductIndex = currentCart?.products?.findIndex(_product => _product.product.id===product.id);
-            if (existingProductIndex !== -1 && existingProductIndex) {
+            if (existingProductIndex !== -1 && existingProductIndex !== undefined ) {
                 // Update quantity if product already exists in cart
                 // if(currentCart.products?[existingProductIndex] !== undefined && currentCart.products !== undefined )
-                if (currentCart.products)
-                    currentCart.products[existingProductIndex].quantity = quantity
+                if (currentCart.products){
+                    if (write){
+                        currentCart.products[existingProductIndex].quantity = quantity;
+                    }
+                    else{
+                        currentCart.products[existingProductIndex].quantity += quantity //1;
+                    }
+                }
             } else {
                 // Add new product to cart
-                currentCart.products?.push({ product, quantity });
+                if (currentCart.products){
+                    currentCart.products?.push({ product, quantity });
+                }
             }
             await this._firestore.updateDocument('carts', currentCart.id??'', currentCart);
             this.cart = currentCart; // Update the cart observable
         }
     }
-    async removeFromCart(cartID:string, productId:number):Promise<boolean> {
+    async removeFromCart(productId:number):Promise<boolean> {
         const currentCart = this._cart.getValue();
         if(currentCart){
             const existingProductIndex = currentCart.products?.findIndex(_product => _product.product.id===productId);
