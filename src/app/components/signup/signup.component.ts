@@ -41,10 +41,10 @@ export class SignupComponent {
           this._router.navigate(['/login']);
         }
         if(registered?.error){
-          this._toastrService.error('Error while registering user: ' + registered?.error);
+          this._toastrService.error('Error while registering user');
         }
       }).catch((error:Error) => {
-        this._toastrService.error('Error while registering user: ' + error?.message);
+        this._toastrService.error('Error while registering user');
       });
 
     }else{
