@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { GoogleAuthProvider } from 'firebase/auth/web-extension';
+import { auth } from '../../../main';
+import { getRedirectResult } from 'firebase/auth/cordova';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,11 @@ export class LoginComponent implements OnInit {
   hostname:string = window.location.hostname;
   constructor(private _authService:AuthService , private _router :Router , private _toastrService:ToastrService){}
   ngOnInit(): void {
+    getRedirectResult(auth).then((response)=>{
+      console.log(response);
+    }).catch((error)=>{
+      console.log(error);
+    });;
   }
 
   onLoginForm(form:FormGroup):void{
@@ -67,25 +73,6 @@ export class LoginComponent implements OnInit {
   async signInWithgoogleRedirect() {
     try {
       await this._authService.signInwithgoogleRedirect();
-      const response = await this._authService.getGoogleRedirectResult();
-      if (response.error){
-        this._toastrService.error(response.error);
-        return;
-      }
-      else if (response.success){
-        if(response.result){
-          // Store token in local storage
-          let userCredential = GoogleAuthProvider.credentialFromResult(response.result);
-          if (userCredential && userCredential.accessToken)
-          {
-            localStorage.setItem('token', userCredential.accessToken);              
-            // Signed in 
-            this._toastrService.success('User logged in successfully');
-          // Redirect to home page
-            this._router.navigate(['/home']);
-          }
-        }
-      }
     } catch (error:any) {
       this._toastrService.error('Error while logging in with Google Auth: ' + error?.message);
     }

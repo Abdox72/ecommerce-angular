@@ -50,13 +50,15 @@ export class CartService {
                 }
             });
         }else{
-            const existingProductIndex = currentCart.products.findIndex(_product => _product.product.id===product.id);
-            if (existingProductIndex !== -1) {
+            const existingProductIndex = currentCart?.products?.findIndex(_product => _product.product.id===product.id);
+            if (existingProductIndex !== -1 && existingProductIndex) {
                 // Update quantity if product already exists in cart
-                currentCart.products[existingProductIndex].quantity = quantity;
+                // if(currentCart.products?[existingProductIndex] !== undefined && currentCart.products !== undefined )
+                if (currentCart.products)
+                    currentCart.products[existingProductIndex].quantity = quantity
             } else {
                 // Add new product to cart
-                currentCart.products.push({ product, quantity });
+                currentCart.products?.push({ product, quantity });
             }
             await this._firestore.updateDocument('carts', currentCart.id??'', currentCart);
             this.cart = currentCart; // Update the cart observable
@@ -65,10 +67,10 @@ export class CartService {
     async removeFromCart(cartID:string, productId:number):Promise<boolean> {
         const currentCart = this._cart.getValue();
         if(currentCart){
-            const existingProductIndex = currentCart.products.findIndex(_product => _product.product.id===productId);
-            if (existingProductIndex !== -1) {
+            const existingProductIndex = currentCart.products?.findIndex(_product => _product.product.id===productId);
+            if (existingProductIndex !== -1 && existingProductIndex!==undefined) {
                 //delete currentCart.products[existingProductIndex]
-                currentCart.products.splice(existingProductIndex, 1);
+                currentCart.products?.splice(existingProductIndex, 1);
             }
             await this._firestore.updateDocument('carts', currentCart.id??'', currentCart);
             this.cart = currentCart; // Update the cart observable

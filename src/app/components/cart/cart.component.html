@@ -3,10 +3,10 @@
         <h2>My Cart <span class="badge bg-primary">{{(userCart|async)?.products?.length}}</span></h2>
     </div>
     <!-- Cart Items -->
-    <div *ngIf="userCart|async as userCart">
-        <div class="row" *ngIf="userCart.products.length > 0 ; else emptyCart">
+    <div *ngIf="userCart|async as _userCart">
+        <div class="row" *ngIf="_userCart.products?.length; else emptyCart">
             <div class="col-lg-8">
-                <div class="cart-item" *ngFor="let product of userCart.products">
+                <div class="cart-item" *ngFor="let product of _userCart.products">
                     <div class="row align-items-center">
                         <div class="col-md-3">
                             <img [src]="product.product.image" [alt]="product.product.title" class="img-fluid product-img">
@@ -21,7 +21,7 @@
                             </div>
                             <div class="mt-3 text-end">
                                 <h4 class="mb-0">{{(product.product.price * product.quantity) | currency }}</h4>
-                                <button class="btn btn-link remove-btn" (click)="remove(userCart.id , product.product.id)">
+                                <button class="btn btn-link remove-btn" (click)="remove(_userCart.id , product.product.id)">
                                     <i class="fas fa-trash"></i> Remove
                                 </button>
                             </div>

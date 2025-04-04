@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification,getRedirectResult, signInWithRedirect } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification,getRedirectResult, signInWithRedirect, getAuth } from "firebase/auth";
 import {auth , db} from '../../main';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import { User as IUser } from '../interfaces/user';
 import { BehaviorSubject, Observable } from 'rxjs';
+import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root'
@@ -80,21 +81,24 @@ export class AuthService {
       }
     }
 
-      // Google Sign-In
-      async signInwithgoogleRedirect(){
-        await signInWithRedirect(auth, this.googleProvider);
-      }
-      async getGoogleRedirectResult() : Promise<any> {
-        getRedirectResult(auth)
-        .then((result) => {
-          if(result){
-            return {sucess:'signed in successfully' , result}
-          }else{
-            return{error: 'Google sign-in error' , result:null}
-          }
-        }).catch((error) => {
-          return{error: error.message , result:null}
-        });
-      }
+    // Google Sign-In
+    async signInwithgoogleRedirect(){
+      this.googleProvider.setCustomParameters({  
+        prompt: "select_account"
+      });
+      await signInWithRedirect(auth, this.googleProvider);
+    }
+    async getGoogleRedirectResult() : Promise<any> {
+      getRedirectResult(auth)
+      .then((result) => {
+        if(result){
+          return {sucess:'signed in successfully' , result}
+        }else{
+          return{error: 'Google sign-in error' , result:null}
+        }
+      }).catch((error) => {
+        return{error: error.message , result:null}
+      });
+    }
   
 }

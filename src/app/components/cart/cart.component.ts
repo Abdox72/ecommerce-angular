@@ -36,7 +36,7 @@ export class CartComponent implements OnInit ,OnDestroy{
     this.initConfig();
   }
   remove(cartid?:string , productId? : number) {
-    this._cartService.removeFromCart(cartid??'', productId??0).then((removed) => {
+    this._cartService.removeFromCart('', productId ?? 0).then((removed) => {
       if(removed) {
         this.cartInit();
         this._toastr.success("Product removed successfully");
@@ -58,21 +58,7 @@ export class CartComponent implements OnInit ,OnDestroy{
       } else {
         this.userCart = {
           userId: "null",
-          products: [{
-            product: {
-              id: 0,
-              title: "null",
-              price: 0,
-              description: "null",
-              category: "null",
-              image: "null",
-              rating: {
-                rate: 0,
-                count: 0
-              }
-            },
-            quantity: 0
-          }]
+          products:undefined
         }; // Handle case when cart is null
       }
       this.userCart.subscribe( cart => {
@@ -96,7 +82,7 @@ export class CartComponent implements OnInit ,OnDestroy{
     private initConfig(): void {
         const currency = 'USD';
         this.userCart.subscribe(cart=>{
-          const items_bag = cart?.products.map(product => {
+          const items_bag = cart?.products?.map(product => {
             return <ITransactionItem> {
               name:product.product.title,
               category: 'PHYSICAL_GOODS',
