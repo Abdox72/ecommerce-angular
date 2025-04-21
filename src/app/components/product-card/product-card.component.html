@@ -1,26 +1,25 @@
 <div class="card h-100 p-2">
     <div class="card-layer"></div>
-    <div class="card-icon" role="button" [routerLink]="['/productDetails' , productCard.id]"><i class="fa-regular fa-eye fs-1 fw-bolder z-3"></i></div>
+    <div class="card-icon" role="button" [routerLink]="['/productDetails' , productCard.id]">
+        <i class="fa-regular fa-eye fs-1 fw-bolder z-3"></i>
+    </div>
     <img src="assets/imgs/best-buy.png" *ngIf="productCard?.bayesianScore" class="card-img-best" alt="Top selling">
     <img [src]="productCard.image" height="300px" class="card-img-top" [alt]="productCard.title">
     <div class="card-body d-flex flex-column">
         <h5 class="card-title text-truncate">{{productCard.title}}</h5>
         <p class="card-text badge bg-success-subtle text-black text-opacity-50">{{productCard.category}}</p>
-        <p class="card-text fw-bold">   {{productCard.price | currency}}</p>
+        <p class="card-text fw-bold">{{productCard.price | currency}}</p>
         <div class="rating mb-2">
-          <span class="text-warning">{{productCard.rating.rate.toString() | rate }}</span><small>({{productCard.rating.rate}})</small>
+            <span class="text-warning">{{productCard.rating.rate.toString() | rate}}</span>
+            <small>({{productCard.rating.rate}})</small>
         </div>
-        <!-- <div class="d-flex flex-row justify-content-start align-items-center flex-wrap gap-1">
-          <a class="btn btn-info mt-auto me-2" (click)="addtocart()"><i class="fa-solid fa-cart-plus"></i> Add To Cart</a>
-          <a class="btn btn-info mt-auto" (click)="addtowishlist()"><i class="fa-solid fa-heart"></i> Add To Wishlist</a>
-        </div> -->
-        <!-- Add to Cart -->
         <div class="d-flex gap-2 flex-row justify-content-start align-items-center flex-wrap">
-          <button class="btn add-to-cart-btn" (click)="addtocart()">
-              <i class="bi bi-cart3 me-2"></i>Add to Cart
-          </button>
-          <button class="btn btn-outline-secondary px-4 py-2" (click)="addtowishlist()">
-              <i class="bi bi-heart"></i>
-          </button>
-      </div>
+            <button class="btn add-to-cart-btn" (click)="addtocart()">
+                <i class="bi bi-cart3 me-2"></i>Add to Cart
+            </button>
+            <button class="btn wishlist-btn" [class.active]="isInWishlist" (click)="toggleWishlist()">
+                <i class="bi" [class.bi-heart-fill]="isInWishlist" [class.bi-heart]="!isInWishlist"></i>
+            </button>
+        </div>
     </div>
+</div>

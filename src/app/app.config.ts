@@ -5,6 +5,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { loadingInterceptor } from './interceptors/loading.interceptor';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 
 export const appConfig: ApplicationConfig = {
@@ -16,5 +17,6 @@ export const appConfig: ApplicationConfig = {
       provideHttpClient(
         withInterceptors([loadingInterceptor])
       ),
+      DatePipe
   ]
 };

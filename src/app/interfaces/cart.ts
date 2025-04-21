@@ -3,11 +3,9 @@ import { Product } from "./product";
 export interface Cart {
     id?: string;
     userId?: string;
-    products?: [
-        {
-            product: Product;
-            quantity: number;
-        }
-    ]
+    products?: CartItem[]
 }
-
+interface CartItem{
+    product: Product;
+    quantity: number;
+}

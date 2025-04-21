@@ -1,0 +1,110 @@
+<div class="container-lg py-5">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="d-flex justify-content-center align-items-center py-5 my-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- Order Details -->
+  <div *ngIf="!loading && !error && order" class="row g-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 fw-bold mb-0">Order Details</h1>
+        <a routerLink="/orders" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-left me-2"></i>Back to Orders
+        </a>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent border-0 py-3">
+          <h5 class="card-title mb-0">Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Order ID:</span>
+            <span class="fw-bold">#{{order.id}}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Date:</span>
+            <span>{{order.createdAt | firestoreDate:'mediumDate'}}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Status:</span>
+            <span class="badge" [ngClass]="getStatusClass(order.status)">
+              {{order.status}}
+            </span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Total:</span>
+            <span class="fw-bold">{{order.total | currency }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping Information -->
+      <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-transparent border-0 py-3">
+          <h5 class="card-title mb-0">Shipping Information</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-1"><strong>{{order.shippingInfo.name}}</strong></p>
+          <p class="mb-1">{{order.shippingInfo.address}}</p>
+          <p class="mb-1">{{order.shippingInfo.city}}, {{order.shippingInfo.state}} {{order.shippingInfo.zipCode}}</p>
+          <p class="mb-1">{{order.shippingInfo.country}}</p>
+          <p class="mb-0">{{order.shippingInfo.email}}</p>
+          <p *ngIf="order.shippingInfo.phone">{{order.shippingInfo.phone}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-transparent border-0 py-3">
+          <h5 class="card-title mb-0">Order Items</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of order.items">
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img [src]="item.product.image" [alt]="item.product.title" 
+                            class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                      <div>
+                        <h6 class="mb-0">{{item.product.title}}</h6>
+                        <small class="text-muted">SKU: {{item.product.id}}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{item.product.price | currency}}</td>
+                  <td>{{item.quantity}}</td>
+                  <td>{{(item.product.price * item.quantity )| currency}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,152 @@
+<div class="container-lg py-5" [ngClass]="ifEmpty()">
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <h1 class="h2 fw-bold mb-0">Order History</h1>
+    <div class="d-none d-md-block">
+      <span class="badge bg-primary">{{orders.length}} orders</span>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="d-flex justify-content-center align-items-center py-5 my-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <!-- Orders List -->
+  <div *ngIf="!loading && !error" class="row g-4">
+    <!-- Empty State -->
+    <div *ngIf="orders.length === 0" class="col-12 text-center py-6">
+      <div class="empty-state">
+        <i class="bi bi-box-seam display-1 text-muted mb-4"></i>
+        <h3 class="h4 mb-3">No Orders Found</h3>
+        <p class="text-muted mb-4">Start shopping to view your order history</p>
+        <a routerLink="/products" class="btn btn-primary px-5">Browse Products</a>
+      </div>
+    </div>
+
+    <!-- Current Orders -->
+    <div *ngIf="currentOrders.length > 0" class="col-12">
+      <h3 class="h4 mb-4">Current Orders</h3>
+      <div class="row g-4">
+        <div *ngFor="let order of currentOrders" class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent border-0 py-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="text-muted me-3">Order #{{order.id}}</span>
+                  <span class="badge bg-primary">{{order.items.length}} items</span>
+                </div>
+                <small class="text-muted">{{ order.createdAt | firestoreDate:'mediumDate' }}</small>
+              </div>
+            </div>
+            
+            <div class="card-body pt-0">
+              <div class="row g-4">
+                <!-- Order Items -->
+                <div class="col-md-8">
+                  <div class="row g-3">
+                    <div *ngFor="let item of order.items" class="col-6 col-md-4">
+                      <div class="product-card position-relative">
+                        <img [src]="item.product.image" alt="Product image" 
+                              class="img-fluid rounded-3 mb-2 product-image">
+                        <div class="position-absolute top-0 start-0 bg-primary text-white px-2 py-1 small">
+                          x{{ item.quantity }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-md-4">
+                  <div class="d-grid gap-2">
+                    <div class="d-flex justify-content-between">
+                      <span class="text-muted">Total:</span>
+                      <span class="fw-bold">{{ order.total|currency }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <span class="text-muted">Status:</span>
+                      <span class="badge" [ngClass]="getStatusClass(order.status)">
+                        {{ order.status }}
+                      </span>
+                    </div>
+                    <button class="btn btn-outline-primary mt-3" 
+                            [routerLink]="['/orders', order.id]">
+                      View Details <i class="bi bi-chevron-right ms-2"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Past Orders -->
+    <div *ngIf="pastOrders.length > 0" class="col-12">
+      <h3 class="h4 mb-4">Past Orders</h3>
+      <div class="row g-4">
+        <div *ngFor="let order of pastOrders" class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent border-0 py-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="text-muted me-3">Order #{{order.id}}</span>
+                  <span class="badge bg-primary">{{order.items.length}} items</span>
+                </div>
+                <small class="text-muted">{{ order.createdAt | firestoreDate:'mediumDate' }}</small>
+              </div>
+            </div>
+
+            <div class="card-body pt-0">
+              <div class="row g-4">
+                <!-- Order Items -->
+                <div class="col-md-8">
+                  <div class="row g-3">
+                    <div *ngFor="let item of order.items" class="col-6 col-md-4">
+                      <div class="product-card position-relative">
+                        <img [src]="item.product.image" alt="Product image" 
+                              class="img-fluid rounded-3 mb-2 product-image">
+                        <div class="position-absolute top-0 start-0 bg-primary text-white px-2 py-1 small">
+                          x{{ item.quantity }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-md-4">
+                  <div class="d-grid gap-2">
+                    <div class="d-flex justify-content-between">
+                      <span class="text-muted">Total:</span>
+                      <span class="fw-bold">{{ order.total | currency }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <span class="text-muted">Status:</span>
+                      <span class="badge" [ngClass]="getStatusClass(order.status)">
+                        {{ order.status }}
+                      </span>
+                    </div>
+                    <button class="btn btn-outline-primary mt-3" 
+                            [routerLink]="['/orders', order.id]">
+                      View Details <i class="bi bi-chevron-right ms-2"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

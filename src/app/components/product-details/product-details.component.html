@@ -15,12 +15,12 @@
             
             <!-- Rating -->
             <div class="rating mb-3">
-                <span> {{product.rating.rate.toString()| rate}} </span>
+                <span>{{product.rating.rate.toString()| rate}}</span>
                 <span class="ms-2">({{product.rating.count}})</span>
             </div>
 
             <!-- Price -->
-            <h2 class="price mb-4"> {{product.price | currency  }} </h2>
+            <h2 class="price mb-4">{{product.price | currency}}</h2>
 
             <!-- Description -->
             <div class="description mb-4">
@@ -28,13 +28,14 @@
                     {{product.description}}
                 </p>
             </div>
-            <!-- Add to Cart -->
+
+            <!-- Add to Cart and Wishlist -->
             <div class="d-flex gap-3">
                 <button class="btn add-to-cart-btn" (click)="addtocart()">
                     <i class="bi bi-cart3 me-2"></i>Add to Cart
                 </button>
-                <button class="btn btn-outline-secondary px-4 py-2" (click)="addtowishlist()">
-                    <i class="bi bi-heart"></i>
+                <button class="btn wishlist-btn" [class.active]="isInWishlist" (click)="toggleWishlist()">
+                    <i class="bi" [class.bi-heart-fill]="isInWishlist" [class.bi-heart]="!isInWishlist"></i>
                 </button>
             </div>
         </div>

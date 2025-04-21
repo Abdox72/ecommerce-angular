@@ -1,19 +1,100 @@
 .logo {
-    height: 90px; /* Adjust based on your logo size */
-  }
-  
-  .navbar {
-    padding: 0 0 !important;
+    height: 80px;
+    transition: transform 0.3s ease;
+    object-fit: contain;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+    padding: 0.5rem 0 !important;
     border-bottom-left-radius: 5px !important;
     border-bottom-right-radius: 5px !important;
-    }
-  
-  
-  .btn {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff !important;
+}
+
+.btn {
     font-weight: 600;
-  }
-.active-nav-link{
-    background-color: rgb(37, 37, 171) !important;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary {
+    border: 2px solid #0d6efd;
+    color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+}
+
+.active-nav-link {
+    background-color: #0d6efd !important;
     color: white !important;
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+}
+
+.navbar-brand {
+    padding: 0 !important;
+    margin-right: 2rem;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 992px) {
+    .logo {
+        height: 60px;
+        padding: 3px;
+    }
+    
+    .navbar {
+        padding: 0.3rem 0 !important;
+    }
+
+    .navbar-brand {
+        margin-right: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        margin: 0.5rem 0;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .d-flex {
+        width: 100%;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .me-2 {
+        margin-right: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo {
+        height: 50px;
+    }
+
+    .navbar {
+        padding: 0.2rem 0 !important;
+    }
+
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
 }
 

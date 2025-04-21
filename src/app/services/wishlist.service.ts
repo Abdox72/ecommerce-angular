@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Wishlist } from '../interfaces/wishlist';
 import { AuthService } from './auth.service';
 import { Product } from '../interfaces/product';
@@ -10,108 +10,104 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class WishlistService {
   private _wishlist = new BehaviorSubject<Wishlist|null>(null);
+  private _isInWishlist = new BehaviorSubject<boolean>(false);
 
-  constructor(private auth:AuthService , private _toastr:ToastrService) {
+  constructor(private auth:AuthService, private _toastr:ToastrService) {
     this.listenToWishList();
     this.initalizeWishlistFromLocalStorage();
   }
 
-  get wishlist() {
-      return this._wishlist.asObservable();
+  get wishlist(): Observable<Wishlist|null> {
+    return this._wishlist.asObservable();
   }
-  private initalizeWishlistFromLocalStorage(){
-    try{
+
+  isProductInWishlist(productId: number): boolean {
+    const currentWishlist = this._wishlist.getValue();
+    return currentWishlist?.products.some(p => p.id === productId) ?? false;
+  }
+
+  private initalizeWishlistFromLocalStorage() {
+    try {
       this.auth.getCurrentUser().subscribe((user) => {
-        if(user){
+        if(user) {
           let wishlistjson = localStorage.getItem('wishlist');
-          if(!!wishlistjson)
-          {
+          if(!!wishlistjson) {
             const wishlist:Wishlist = JSON.parse(wishlistjson as string);
-            this._wishlist.next(wishlist)
-          }else{
-            const jsonstr = JSON.stringify({
+            this._wishlist.next(wishlist);
+          } else {
+            const newWishlist: Wishlist = {
               userId: user.uid,
-              products:[]
-            });
-            localStorage.setItem('wishlist', jsonstr);
-            this._wishlist.next({
-              userId: user.uid,
-              products:[]
-            });
+              products: []
+            };
+            localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+            this._wishlist.next(newWishlist);
           }
         }
-        else{
-          console.log('unauthenticated user');
-        }
       });
-    }catch(error){
-      //handle
-      console.log(error);
-    }
-  }
-  listenToWishList(){
-    this._wishlist.subscribe((wishlist)=>{
-      if(wishlist)
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-    })
-  }
-  getfromlocalstorage():Wishlist|null {
-    const result  = localStorage.getItem('wishlist');
-    if(result) {
-      return JSON.parse(result) ;
-    }
-    else{
-      return null; 
+    } catch(error) {
+      console.error('Error initializing wishlist:', error);
     }
   }
 
-  addWishlist(product:Product)
-  {
-    try{
-      const wishlist:Wishlist|null = this.getfromlocalstorage()
-      //if  product exist remove it
-      if(wishlist)
-      {
-        const existingProductIndex = wishlist?.products.findIndex(_product => _product.id===product.id);
-        if (existingProductIndex !== -1 &&  existingProductIndex!== undefined) {
-          this.removeFromwishlist(wishlist.products[existingProductIndex]);
-          // this._toastr.success("the Product removed From your Wishlist");
+  private listenToWishList() {
+    this._wishlist.subscribe((wishlist) => {
+      if(wishlist) {
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      }
+    });
+  }
+
+  addWishlist(product:Product) {
+    try {
+      const currentWishlist = this._wishlist.getValue();
+      
+      if(currentWishlist) {
+        const existingProductIndex = currentWishlist.products.findIndex(p => p.id === product.id);
+        
+        if(existingProductIndex !== -1) {
+          // Product exists, remove it
+          currentWishlist.products.splice(existingProductIndex, 1);
+          this._wishlist.next(currentWishlist);
+          this._toastr.info("Product removed from wishlist");
           return;
         }
-      }
-      //if wishlist and product is not exist in wishlist container >> push it
-      //else (not wishlist) intialize one wish userid and the product
-      if(wishlist) {
-        wishlist.products.push(product);
-        this._wishlist.next(wishlist);
-        // this._toastr.success("the Product inserted into your Wishlist");
-        return;
-      }
-      else{
-        this.auth.getCurrentUser().subscribe(user =>{
-          let newwishlist:Wishlist = {
-            userId:user?.uid as string,
-            products:[product]
+        
+        // Product doesn't exist, add it
+        currentWishlist.products.push(product);
+        this._wishlist.next(currentWishlist);
+        this._toastr.success("Product added to wishlist");
+      } else {
+        // No wishlist exists, create new one
+        this.auth.getCurrentUser().subscribe(user => {
+          if(user) {
+            const newWishlist: Wishlist = {
+              userId: user.uid,
+              products: [product]
+            };
+            this._wishlist.next(newWishlist);
+            this._toastr.success("Product added to wishlist");
           }
-          this._wishlist.next(newwishlist);
-        })
+        });
       }
-    }catch(error){
-      console.log(error);
+    } catch(error) {
+      console.error('Error updating wishlist:', error);
+      this._toastr.error("Failed to update wishlist");
     }
   }
-  removeFromwishlist(product:Product){
+
+  removeFromwishlist(product:Product) {
     try {
-    const newwishlist = this._wishlist.getValue();
-    const index = newwishlist?.products.indexOf(product)??-1;
-    if(index!== -1)
-    {
-      newwishlist?.products.splice(index , 1);
-      this._wishlist.next(newwishlist);
-      // this._toastr.success("The Product removed form you Wishlist");
-    }
-    } catch (e) {
-      console.error(e);
+      const currentWishlist = this._wishlist.getValue();
+      if(currentWishlist) {
+        const index = currentWishlist.products.findIndex(p => p.id === product.id);
+        if(index !== -1) {
+          currentWishlist.products.splice(index, 1);
+          this._wishlist.next(currentWishlist);
+        }
+      }
+    } catch(error) {
+      console.error('Error removing from wishlist:', error);
+      this._toastr.error("Failed to remove from wishlist");
     }
   }
 }

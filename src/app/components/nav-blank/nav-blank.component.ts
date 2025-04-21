@@ -22,7 +22,7 @@ export class NavBlankComponent implements OnInit {
   ngOnInit(): void {
       this.auth.getCurrentUser().subscribe(user => {
         this.usernme = user?.displayName;
-        this.imgurl = user?.photoURL;
+        this.imgurl = user?.photoURL || "assets/imgs/default-avatar-profile-icon.jpg";
       });
   }
 }

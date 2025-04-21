@@ -53,7 +53,6 @@ export class CartService {
             const existingProductIndex = currentCart?.products?.findIndex(_product => _product.product.id===product.id);
             if (existingProductIndex !== -1 && existingProductIndex !== undefined ) {
                 // Update quantity if product already exists in cart
-                // if(currentCart.products?[existingProductIndex] !== undefined && currentCart.products !== undefined )
                 if (currentCart.products){
                     if (write){
                         currentCart.products[existingProductIndex].quantity = quantity;
@@ -77,7 +76,6 @@ export class CartService {
         if(currentCart){
             const existingProductIndex = currentCart.products?.findIndex(_product => _product.product.id===productId);
             if (existingProductIndex !== -1 && existingProductIndex!==undefined) {
-                //delete currentCart.products[existingProductIndex]
                 currentCart.products?.splice(existingProductIndex, 1);
             }
             await this._firestore.updateDocument('carts', currentCart.id??'', currentCart);
@@ -86,6 +84,39 @@ export class CartService {
         }
         return false;
     }
-
+    getCartItems(): Product[] {
+        const currentCart = this._cart.getValue();
+        if (currentCart && currentCart.products) {
+            return currentCart.products.map(item => item.product);
+        }
+        return [];
+    }
+    getProductQuantity(productId: number): number {
+        const currentCart = this._cart.getValue();
+        if (currentCart && currentCart.products) {
+            const item = currentCart.products.find(item => item.product.id === productId);
+            return item ? item.quantity : 0;
+        }
+        return 0;
+    }
+    getTotal(): number {
+        const currentCart = this._cart.getValue();
+        if (currentCart && currentCart.products) {
+            return currentCart.products.reduce((total, item) => {
+                return total + (item.product.price * item.quantity);
+            }, 0);
+        }
+        return 0;
+    }
+    clearCart(): void {
+        const currentCart = this._cart.getValue();
+        if (currentCart) {
+            const emptyCart: Cart = {
+                ...currentCart,
+                products: []
+            };
+            this._firestore.updateDocument('carts', currentCart.id??'', emptyCart);
+            this.cart = emptyCart;
+        }
+    }
 }
-
