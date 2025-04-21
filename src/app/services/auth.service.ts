@@ -13,7 +13,7 @@ export class AuthService {
   private user$ = new BehaviorSubject<User | null>(null);
   private googleProvider = new GoogleAuthProvider();
 
-  constructor(private firestoreService:FirestoreService) {
+  constructor() {
     onAuthStateChanged(auth, (user) => {
       this.user$.next(user);
     });
@@ -45,10 +45,9 @@ export class AuthService {
   async login(userLogin:UserLogin): Promise<any> {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, userLogin.email, userLogin.password);
-      // userCredential.user.displayName = user.displayName;
-      // if (!userCredential.user.emailVerified) {
-      //   throw new Error('Please verify your email before signing in.');
-      // }
+      if (!userCredential.user.emailVerified) {
+        throw new Error('Please verify your email before signing in.');
+      }
       return {success:"Logged in successfully." , token: await userCredential.user.getIdToken()};
     } catch (error:any) {
       return {error : error?.message}; // Registration failed
