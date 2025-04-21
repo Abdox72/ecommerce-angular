@@ -25,9 +25,9 @@
         </li>
       </ul>
       <div class="d-flex align-items-center">
-        <div class="user-profile me-3" *ngIf="usernme">
+        <div class="user-profile me-3" *ngIf="displayName">
           <img class="rounded-circle" alt="photo" [src]="imgurl" />
-          <span class="d-none d-lg-inline">{{usernme}}</span>
+          <span class="d-none d-lg-inline">{{displayName}}</span>
         </div>
         <a class="logout-btn text-decoration-none" role="button" (click)="logout()">
           <i class="bi bi-box-arrow-right me-1"></i>Logout

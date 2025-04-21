@@ -14,12 +14,13 @@ import { ToastrService  } from 'ngx-toastr';
 })
 export class SignupComponent {
   signupForm:FormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(3) , Validators.maxLength(30)]),
-    username: new FormControl('' , [Validators.required, Validators.minLength(3) , Validators.maxLength(20)]),
+    displayName: new FormControl('', [Validators.required, Validators.minLength(3) , Validators.maxLength(30)]),
     email: new FormControl('' , [Validators.required, Validators.email]),
     password: new FormControl('' , [Validators.required, Validators.pattern(/^[a-zA-z0-9_@&%$-.#]{6,}$/)]),
-    confirmPassword: new FormControl(''),
-    phoneNumber: new FormControl('' , [Validators.required, Validators.pattern(/^[01][0125][0-9]{9}$/)])
+    confirmPassword: new FormControl('' , [Validators.required]),
+    phoneNumber: new FormControl('' , [Validators.required, Validators.pattern(/^[01][0125][0-9]{9}$/)]),
+    address: new FormControl(''),
+    photoURL: new FormControl(''),
   } ,{validators: [this.validateConfirmPassword] } as FormControlOptions );
 
   constructor(private authService: AuthService , private _router: Router , private _toastrService: ToastrService){
@@ -35,7 +36,11 @@ export class SignupComponent {
   }
   onSubmitForm(form:FormGroup):void{
     if(form.valid){
-      this.authService.registerUser(this.signupForm.value).then((registered) => {
+      const {confirmPassword , ...FormData} = this.signupForm.value;
+      FormData.photoURL = (FormData.photoURL && FormData.photoURL != '') ?
+        FormData.photoURL : "assets/imgs/default-avatar-profile-icon.jpg" ;
+      FormData.role = "customer";
+      this.authService.registerUser(FormData).then((registered) => {
         if(registered?.success){
           this._toastrService.success('User registered successfully. Please check your inbox for verification email.');
           this._router.navigate(['/login']);

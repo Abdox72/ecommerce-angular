@@ -23,7 +23,6 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadOrders();
-    console.log(this.orders)
   }
 
   loadOrders(): void {

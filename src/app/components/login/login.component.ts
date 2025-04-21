@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
     }
     else{
           const {email , password} = this.loginForm.value;
-          this._authService.login( email , password).then((result:any) => {
+          this._authService.login({email , password}).then((result:any) => {
             if (result.success) {
               // Store token in local storage
               localStorage.setItem('token', result.token);              

@@ -1,11 +1,11 @@
 export interface User {
-    name: string;
-    username: string;
+    displayName: string;
     email: string;
     password: string;
-    confirmPassword: string;
-    phoneNumber: string;
+    phoneNumber?: string;
     role?: string;
+    photoURL?:string;
+    Address?:string;
 }
 export interface UserLogin {
     email: string;

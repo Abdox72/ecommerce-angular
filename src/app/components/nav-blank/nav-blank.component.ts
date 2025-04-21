@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './nav-blank.component.css'
 })
 export class NavBlankComponent implements OnInit {
-  usernme?: string|null;
+  displayName?: string|null;
   imgurl?: string|null;
   constructor(private auth:AuthService , private _router:Router) { }
   logout(){
@@ -21,7 +21,7 @@ export class NavBlankComponent implements OnInit {
   }
   ngOnInit(): void {
       this.auth.getCurrentUser().subscribe(user => {
-        this.usernme = user?.displayName;
+        this.displayName = user?.displayName;
         this.imgurl = user?.photoURL || "assets/imgs/default-avatar-profile-icon.jpg";
       });
   }

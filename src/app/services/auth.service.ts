@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification,getRedirectResult, signInWithRedirect, getAuth } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification,getRedirectResult, signInWithRedirect, getAuth ,updateProfile ,updatePhoneNumber  } from "firebase/auth";
 import {auth , db} from '../../main';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
-import { User as IUser } from '../interfaces/user';
+import { User as IUser, UserLogin } from '../interfaces/user';
 import { BehaviorSubject, Observable } from 'rxjs';
-import firebase from 'firebase/compat/app';
+import { FirestoreService } from './firestore.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class AuthService {
   private user$ = new BehaviorSubject<User | null>(null);
   private googleProvider = new GoogleAuthProvider();
 
-  constructor() {
+  constructor(private firestoreService:FirestoreService) {
     onAuthStateChanged(auth, (user) => {
       this.user$.next(user);
     });
@@ -22,29 +22,30 @@ export class AuthService {
   async registerUser(usr:IUser): Promise<any> {
     try {
       // Create user in Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(auth, usr.email, usr.password);
-      await sendEmailVerification(userCredential.user);
+      const {password , ...userData} = usr; // Destructure user data
+      const userCredential = await createUserWithEmailAndPassword(auth, userData.email, password);
       const user: User = userCredential.user;
-
-      const { name, email, username , phoneNumber } = usr; // Destructure user data
+      await updateProfile(user, {
+        displayName: userData.displayName,
+        photoURL: userData.photoURL,
+      });
       // Store user data in Firestore
       await setDoc(doc(db, 'users', user.uid), {
-        name: name,
-        username: username,
-        email: email,
-        phoneNumber: phoneNumber,
-        role: 'customer',
-        createdAt: new Date().toISOString(),
+          role: userData.role||"customer",
+          phoneNumber:userData.phoneNumber || "",
+          address:userData.Address || ""
       });
+      await sendEmailVerification(userCredential.user);
       return {success:'Verification email sent. Please check your inbox.'};
     } catch (_error:any) {
       return {error : _error?.message};  // Registration failed
     }
   }
 
-  async login(email: string, password: string): Promise<any> {
+  async login(userLogin:UserLogin): Promise<any> {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, userLogin.email, userLogin.password);
+      // userCredential.user.displayName = user.displayName;
       // if (!userCredential.user.emailVerified) {
       //   throw new Error('Please verify your email before signing in.');
       // }
@@ -57,15 +58,12 @@ export class AuthService {
     await signOut(auth);
     localStorage.removeItem('token');
   }
-
   getCurrentUser(): Observable<User | null> {
     return this.user$.asObservable();
   }
-
   async sendPasswordResetEmail(email: string): Promise<void> {
     return sendPasswordResetEmail(auth, email);
   }
-
   async confirmPasswordReset(oobCode: string, newPassword: string): Promise<void> {
     return confirmPasswordReset(auth, oobCode, newPassword);
   }

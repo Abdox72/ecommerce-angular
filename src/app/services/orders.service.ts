@@ -25,10 +25,7 @@ export class OrdersService {
   private async loadUserOrders(): Promise<void> {
     try {
       this.authService.getCurrentUser().subscribe(async (user) => {
-        console.log("asd1")
         if (user) {
-          console.log("asd2")
-
           const orders = await this.firestoreService.getDocumentByFieldWithLimitAndOrder(
             'orders',
             'userId',
@@ -36,10 +33,6 @@ export class OrdersService {
             100,
             'createdAt'
           );
-          console.log("asd3");
-          console.log(orders);
-          console.log("asd4");
-
           this.ordersSubject.next(orders);
         } else {
           this.ordersSubject.next([]);
@@ -106,13 +99,11 @@ export class OrdersService {
       if (!order) {
         throw new Error('Order not found');
       }
-
       const updatedOrder = {
         ...order,
         status,
         updatedAt: new Date()
       };
-
       const success = await this.firestoreService.updateDocument('orders', orderId, updatedOrder);
       if (!success) {
         throw new Error('Failed to update order status');
