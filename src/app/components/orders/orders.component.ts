@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { OrdersService } from '../../services/orders.service';
 import { Order } from '../../interfaces/order';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FirestoreDatePipe } from '../../pipes/firestore-date.pipe';
+import { OrdersService } from '../../services/orders.service';
 
 @Component({
   selector: 'app-orders',

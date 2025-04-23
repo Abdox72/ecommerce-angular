@@ -1,4 +1,4 @@
-import { collection, doc, addDoc, getDocs, getDoc, query, where, updateDoc, deleteDoc, QueryDocumentSnapshot, limit as _limit,orderBy } from "firebase/firestore";
+import { collection, doc, addDoc, getDocs, getDoc, query, where, updateDoc, deleteDoc, limit as _limit,orderBy } from "firebase/firestore";
 import { db } from "../../main"; 
 import { Injectable } from "@angular/core";
 

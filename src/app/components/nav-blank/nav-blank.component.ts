@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { User } from 'firebase/auth';
 import { CommonModule } from '@angular/common';
 
 @Component({

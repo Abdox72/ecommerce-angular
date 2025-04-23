@@ -1,22 +1,44 @@
 import { Injectable } from '@angular/core';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification,getRedirectResult, signInWithRedirect, getAuth ,updateProfile ,updatePhoneNumber  } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification, signInWithRedirect, getRedirectResult, updateProfile  } from "firebase/auth";
 import {auth , db} from '../../main';
-import { doc, getFirestore, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { User as IUser, UserLogin } from '../interfaces/user';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { FirestoreService } from './firestore.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private user$ = new BehaviorSubject<User | null>(null);
-  private googleProvider = new GoogleAuthProvider();
 
   constructor() {
     onAuthStateChanged(auth, (user) => {
       this.user$.next(user);
     });
+  }
+
+  async handleRedirectResult(): Promise<User|null> {
+    try {
+      console.log('Checking Firebase redirect result…');
+      const result = await getRedirectResult(auth);
+      console.log('Raw redirect result', result);
+
+      if (result?.user) {
+        const user = result.user;
+        // merge your Firestore profile if you like
+        await setDoc(doc(db, 'users', user.uid), {
+          role: 'customer',
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL
+        }, { merge: true });
+        return user;
+      }
+      return null;
+    } catch (e: any) {
+      console.error('Error during getRedirectResult:', e);
+      throw e;
+    }
   }
 
   async registerUser(usr:IUser): Promise<any> {
@@ -69,12 +91,36 @@ export class AuthService {
 
     // Google Sign-In popup
     async signInWithGooglePopup() {
-        const result = await signInWithPopup(auth, this.googleProvider);
-        return result.user;
+        try {
+          const provider = new GoogleAuthProvider();
+          provider.setCustomParameters({ prompt: 'select_account' });
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            // Store user data in Firestore
+            await setDoc(doc(db, 'users', user.uid), {
+                role: "customer",
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL
+            }, { merge: true });
+            return user;
+        } catch (error) {
+            console.error('Error signing in with Google:', error);
+            throw error;
+        }
     }
 
-    // Google Sign-In
-    async signInwithgoogleRedirect(){
-      await signInWithRedirect(auth, this.googleProvider);
+    // Google Sign-In with redirect
+    async signInwithgoogleRedirect() {
+        try {
+            // Initiate new redirect
+            const provider = new GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
+            await signInWithRedirect(auth, provider);
+
+        } catch (error) {
+            console.error('Error initiating Google sign-in redirect:', error);
+            throw error;
+        }
     }
 }

@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './gaurds/auth.guard';
-import { PageNotFound404Component } from './components/page-not-found404/page-not-found404.component';
 export const routes: Routes = [
     {
         path: '' ,

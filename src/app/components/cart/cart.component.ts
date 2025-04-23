@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CartService } from '../../services/cart.service';
 import { Cart } from '../../interfaces/cart';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Product } from '../../interfaces/product';
@@ -7,9 +6,10 @@ import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink, Router } from '@angular/router';
 import { ICreateOrderRequest, IPayPalConfig, ITransactionItem, NgxPayPalModule } from 'ngx-paypal';
-import { OrdersService } from '../../services/orders.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { COUNTRIES, Country } from '../../constants/countries';
+import { CartService } from '../../services/cart.service';
+import { OrdersService } from '../../services/orders.service';
 
 @Component({
   selector: 'app-cart',

@@ -10,7 +10,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class WishlistService {
   private _wishlist = new BehaviorSubject<Wishlist|null>(null);
-  private _isInWishlist = new BehaviorSubject<boolean>(false);
 
   constructor(private auth:AuthService, private _toastr:ToastrService) {
     this.listenToWishList();

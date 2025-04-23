@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProductsService } from '../../services/products-service.service';
+import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../interfaces/product';
-import { ToastrService } from 'ngx-toastr';
 import { RatePipe } from '../../pipes/rate.pipe';
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
+import { ProductsService } from '../../services/products-service.service';
+import { ToastrService } from 'ngx-toastr';
 import { CartService } from '../../services/cart.service';
 import { WishlistService } from '../../services/wishlist.service';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-product-details',

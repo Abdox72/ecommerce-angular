@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { auth } from '../../../main';
-import { getRedirectResult } from 'firebase/auth/cordova';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,36 +19,14 @@ export class LoginComponent implements OnInit {
   });
   hostname:string = window.location.hostname;
   constructor(private _authService:AuthService , private _router :Router , private _toastrService:ToastrService){}
+  
   async ngOnInit(): Promise<void> {
     // Check if user is already logged in
     const user = auth.currentUser;
-    if (user) {
-      // User is already logged in
-      this._router.navigate(['/home']);
-    } else {
-      // User is not logged in, check for redirect result
-      getRedirectResult(auth)
-      .then(async (result) => {
-        if(result){
-          // User is signed in
-          const user = result.user;
-          // Store token in local storage
-          localStorage.setItem('token', await user.getIdToken());              
-          // Signed in 
-          this._toastrService.success('User logged in successfully');
-          // Redirect to home page
-          this._router.navigate(['/home']);
-        }else{
-          // User is not signed in          
-          // Handle the case when user is not signed in
-          // You can show a message or redirect to login page
-          this._toastrService.info('Please log in to continue');
-          
-        }
-      }).catch((error) => {
-        return{error: error.message , result:null}
-      });
-    }
+      if (user) {
+        // User is already logged in
+        this._router.navigate(['/home']);
+      } 
   }
 
   onLoginForm(form:FormGroup):void{
@@ -94,12 +71,12 @@ export class LoginComponent implements OnInit {
       this._toastrService.error('Error while logging in with Google Auth: ' + error?.message);
     }
   }
+
   async signInWithgoogleRedirect() {
     try {
       await this._authService.signInwithgoogleRedirect();
     } catch (error:any) {
-      this._toastrService.error('Error while logging in with Google Auth: ' + error?.message);
+      this._toastrService.error('Error initiating Google Sign-In: ' + error?.message);
     }
   }
-
 }

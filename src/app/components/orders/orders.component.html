@@ -20,7 +20,7 @@
   </div>
 
   <!-- Orders List -->
-  <div *ngIf="!loading && !error" class="row g-4">
+  <div *ngIf="!loading && !error" class="row g-4 vh-100">
     <!-- Empty State -->
     <div *ngIf="orders.length === 0" class="col-12 text-center py-6">
       <div class="empty-state">
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Current Orders -->
-    <div *ngIf="currentOrders.length > 0" class="col-12">
+    <div *ngIf="currentOrders.length > 0" class="col-12 vh-100">
       <h3 class="h4 mb-4">Current Orders</h3>
       <div class="row g-4">
         <div *ngFor="let order of currentOrders" class="col-12">

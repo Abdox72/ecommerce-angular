@@ -1,0 +1,13 @@
+{
+    "/__/auth/**": {
+      "target": "https://ecommerce-d7013.firebaseapp.com",
+      "secure": true,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/__/firebase/**": {
+      "target": "https://ecommerce-d7013.firebaseapp.com",
+      "secure": true,
+      "changeOrigin": true
+    }
+  }

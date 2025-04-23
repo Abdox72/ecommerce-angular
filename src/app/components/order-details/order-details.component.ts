@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { OrdersService } from '../../services/orders.service';
 import { Order } from '../../interfaces/order';
-import { ToastrService } from 'ngx-toastr';
 import { FirestoreDatePipe } from '../../pipes/firestore-date.pipe';
+import { OrdersService } from '../../services/orders.service';
 
 @Component({
   selector: 'app-order-details',
@@ -21,7 +20,6 @@ export class OrderDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private ordersService: OrdersService,
-    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {

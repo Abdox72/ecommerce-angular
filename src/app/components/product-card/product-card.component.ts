@@ -2,7 +2,6 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Product } from '../../interfaces/product';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { TitlePipe } from '../../pipes/title.pipe';
 import { RatePipe } from '../../pipes/rate.pipe';
 import { CartService } from '../../services/cart.service';
 import { WishlistService } from '../../services/wishlist.service';
